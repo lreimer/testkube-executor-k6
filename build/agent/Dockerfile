@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.17
+FROM golang:1.17 as builder
 WORKDIR /build
 COPY . .
 ENV CGO_ENABLED=0 
@@ -7,8 +7,8 @@ ENV GOOS=linux
 
 RUN cd cmd/agent;go build -o /runner -mod mod -a .
 
-FROM alpine
+FROM loadimpact/k6:0.36.0
 RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=0 /runner /bin/runner
+WORKDIR /home/k6
+COPY --from=builder /runner /bin/runner
 ENTRYPOINT ["/bin/runner"]
