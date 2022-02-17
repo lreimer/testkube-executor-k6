@@ -22,6 +22,7 @@ vendor/
 # Helm
 Chart.lock
 
+.dccache
 .DS_Store
 bin/
 site
