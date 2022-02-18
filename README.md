@@ -28,8 +28,9 @@ export default function () {
 
 Issue the following commands to create and start the script:
 ```bash
-kubectl testkube scripts create --file k6-test-script.js --type "k6/script" --name k6-test-script
+kubectl testkube scripts create --file examples/k6-test-script.js --type "k6/script" --name k6-test-script
 kubectl testkube scripts start k6-test-script
+kubectl testkube scripts start k6-test-script -p vus=2 -p duration=10s
 ```
 
 ## Maintainer
