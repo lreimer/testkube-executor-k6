@@ -1,0 +1,10 @@
+apiVersion: executor.testkube.io/v1
+kind: Executor
+metadata:
+  name: k6-executor
+  namespace: testkube
+spec:
+  executor_type: job
+  image: lreimer/testkube-executor-k6:0.36.0
+  types:
+  - k6/script

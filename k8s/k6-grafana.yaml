@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: testkube
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3000
+      protocol: TCP
+  selector:
+    app: grafana
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: grafana-datasource-config
+    namespace: testkube
+data:
+  datasource.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: k6influxdb
+        type: influxdb
+        access: proxy
+        database: k6
+        url: http://influxdb-service:8086
+        isDefault: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grafana
+  namespace: testkube
+  labels:
+    app: grafana
+spec:
+  containers:
+  - name: grafana
+    image: grafana/grafana:7.5.15
+    env:
+      - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+        value: Admin
+      - name: GF_AUTH_ANONYMOUS_ENABLED
+        value: "true"
+      - name: GF_AUTH_BASIC_ENABLED
+        value: "false"
+    ports:
+      - name: web
+        containerPort: 3000
+    volumeMounts:
+        - name: datasource-yaml
+          mountPath: /etc/grafana/provisioning/datasources/
+          readOnly: true
+  volumes:
+    - name: datasource-yaml
+      configMap:
+        name: grafana-datasource-config
+        items:
+          - key: "datasource.yaml"
+            path: "datasource.yaml"
