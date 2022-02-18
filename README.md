@@ -29,8 +29,16 @@ export default function () {
 Issue the following commands to create and start the script:
 ```bash
 kubectl testkube scripts create --file examples/k6-test-script.js --type "k6/script" --name k6-test-script
+
+# this will basically run 'k6 run k6-test-script.js'
 kubectl testkube scripts start k6-test-script
+
+# this will basically run 'k6 run --vus 2 --duration 10s k6-test-script.js'
 kubectl testkube scripts start k6-test-script -p vus=2 -p duration=10s
+
+# this will basically run 'k6 run --out influxdb=http://influxdb-service:8086/k6 k6-test-script.js'
+# make sure you have the k6 influxdb deployed
+kubectl testkube scripts start k6-test-script -p out=influxdb=http://influxdb-service:8086/k6
 ```
 
 ## Maintainer
