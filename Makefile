@@ -1,4 +1,4 @@
-NAME ?= testkube-executor-k6
+NAME ?= testkube-k6-executor
 BIN_DIR ?= $(HOME)/bin
 VERSION != 0.36.0
 
