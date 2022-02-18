@@ -1,6 +1,6 @@
 NAME ?= testkube-k6-executor
 BIN_DIR ?= $(HOME)/bin
-VERSION != 0.36.0
+VERSION ?= 0.36.0
 
 build:
 	go build -o $(BIN_DIR)/$(NAME) cmd/agent/main.go 

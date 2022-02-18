@@ -8,7 +8,6 @@ ENV GOOS=linux
 RUN cd cmd/agent;go build -o /runner -mod mod -a .
 
 FROM loadimpact/k6:0.36.0
-RUN apk --no-cache add ca-certificates
 WORKDIR /home/k6
 COPY --from=builder /runner /bin/runner
 ENTRYPOINT ["/bin/runner"]
