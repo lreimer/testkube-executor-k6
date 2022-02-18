@@ -1,5 +1,6 @@
 NAME ?= testkube-executor-k6
 BIN_DIR ?= $(HOME)/bin
+VERSION != 0.36.0
 
 build:
 	go build -o $(BIN_DIR)/$(NAME) cmd/agent/main.go 
@@ -13,7 +14,10 @@ mongo-dev:
 	docker run -p 27017:27017 mongo
 
 docker-build: 
-	docker build -t lreimer/$(NAME) -f build/agent/Dockerfile .
+	docker build -t lreimer/$(NAME):$(VERSION) -f build/agent/Dockerfile .
+
+docker-push:
+	docker push lreimer/$(NAME):$(VERSION)
 
 install-swagger-codegen-mac: 
 	brew install swagger-codegen

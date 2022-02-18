@@ -1,50 +1,52 @@
 package runner
 
 import (
+	"fmt"
+
 	"github.com/kubeshop/testkube/pkg/api/v1/testkube"
+	"github.com/kubeshop/testkube/pkg/executor"
 	"github.com/kubeshop/testkube/pkg/executor/content"
 	"github.com/kubeshop/testkube/pkg/executor/output"
 )
 
-func NewRunner() *ExampleRunner {
-	return &ExampleRunner{
+func NewRunner() *K6Runner {
+	return &K6Runner{
 		Fetcher: content.NewFetcher(),
 	}
 }
 
-// ExampleRunner for template - change me to some valid runner
-type ExampleRunner struct {
+type K6Runner struct {
 	Fetcher content.ContentFetcher
 }
 
-func (r *ExampleRunner) Run(execution testkube.Execution) (result testkube.ExecutionResult, err error) {
+func (r *K6Runner) Run(execution testkube.Execution) (result testkube.ExecutionResult, err error) {
 	path, err := r.Fetcher.Fetch(execution.Content)
 	if err != nil {
+		output.PrintError(err)
 		return result, err
 	}
 
-	output.PrintEvent("created content path", path)
-
-	if execution.Content.IsFile() {
-		output.PrintEvent("using file", execution)
-		// TODO implement file based script content for string, git-file, file-uri
-		//      or remove if not used
+	if !execution.Content.IsFile() {
+		output.PrintLog("Execution script content not a file.")
+		return result, testkube.ErrScriptContentTypeNotFile
 	}
 
-	if execution.Content.IsDir() {
-		output.PrintEvent("using dir", execution)
-		// TODO implement file based script content for git-dir
-		//      or remove if not used
+	args := []string{"run"}
+	for key, value := range execution.Params {
+		flag := fmt.Sprintf("--%s", key)
+		args = append(args, flag, value)
+	}
+	args = append(args, execution.Args...)
+	args = append(args, path)
+
+	output.PrintEvent("Running k6", args)
+	output, err := executor.Run("", "k6", args...)
+	if err != nil {
+		return result.Err(err), nil
 	}
 
-	// TODO run executor here
-
-	// error result should be returned if something is not ok
-	// return result.Err(fmt.Errorf("some test execution related error occured"))
-
-	// TODO return ExecutionResult
 	return testkube.ExecutionResult{
 		Status: testkube.StatusPtr(testkube.SUCCESS_ExecutionStatus),
-		Output: "exmaple test output",
+		Output: string(output),
 	}, nil
 }
