@@ -39,6 +39,15 @@ kubectl testkube scripts start k6-test-script -p vus=2 -p duration=10s
 # this will basically run 'k6 run --out influxdb=http://influxdb-service:8086/k6 k6-test-script.js'
 # make sure you have the k6 influxdb deployed
 kubectl testkube scripts start k6-test-script -p out=influxdb=http://influxdb-service:8086/k6
+
+# alternatively, the performance metrics can be published to Prometheus
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/prometheus -n testkube
+
+# also, we need to compile a special k6 binary, will be part of the runner image
+# see https://k6.io/docs/results-visualization/prometheus/
+
 ```
 
 ## Maintainer
