@@ -32,6 +32,10 @@ func (r *K6Runner) Run(execution testkube.Execution) (result testkube.ExecutionR
 	}
 
 	args := []string{"run"}
+	for key, value := range execution.Envs {
+		env_var := fmt.Sprintf("%s=%s", key, value)
+		args = append(args, "-e", env_var)
+	}
 	for key, value := range execution.Params {
 		flag := fmt.Sprintf("--%s", key)
 		args = append(args, flag, value)
