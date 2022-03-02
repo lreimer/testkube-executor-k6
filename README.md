@@ -1,9 +1,8 @@
-![Testkube Logo](https://raw.githubusercontent.com/kubeshop/testkube/main/assets/logo-dark-text.png)
+! This repository has now been archived on favour of the now official TestKube K6 Executor. See https://github.com/testkube/testkube-executor-k6
 
 # Welcome to TestKube K6 Executor
 
-TestKube k6 Executor is a test executor to run k6 load tests with [TestKube](https://testkube.io).  
-This repository is based on the [executor template](https://github.com/kubeshop/testkube-executor-template).
+TestKube k6 Executor is a test executor to run k6 load tests with [TestKube](https://testkube.io).
 
 ## Usage
 
