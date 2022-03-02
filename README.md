@@ -1,4 +1,4 @@
-! This repository has now been archived on favour of the now official TestKube K6 Executor. See https://github.com/testkube/testkube-executor-k6
+:information_source: This repository has now been archived on favour of the now official [TestKube K6 Executor](https://github.com/testkube/testkube-executor-k6)
 
 # Welcome to TestKube K6 Executor
 
